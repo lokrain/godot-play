@@ -1,0 +1,51 @@
+[gd_scene load_steps=10 format=3 uid="uid://b81bnjo4urm70"]
+
+[ext_resource type="Script" path="res://Player.cs" id="1_apcqo"]
+[ext_resource type="PackedScene" uid="uid://gnn0ibvowd0m" path="res://sky_environment.tscn" id="1_csire"]
+[ext_resource type="Shader" path="res://world.gdshader" id="3_703vx"]
+[ext_resource type="Script" path="res://Terrain.cs" id="3_jkpni"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_rj86p"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_0vrr0"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_qx70j"]
+lightmap_size_hint = Vector2i(12, 12)
+size = Vector2(144, 144)
+
+[sub_resource type="Skin" id="Skin_ysluw"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_727p2"]
+render_priority = 0
+shader = ExtResource("3_703vx")
+
+[node name="World" type="Node3D"]
+
+[node name="Player" type="CharacterBody3D" parent="."]
+collision_layer = 3
+collision_mask = 0
+motion_mode = 1
+script = ExtResource("1_apcqo")
+
+[node name="CameraHolder" type="Node3D" parent="Player"]
+
+[node name="Camera3D" type="Camera3D" parent="Player/CameraHolder"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Player"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CapsuleShape3D_rj86p")
+
+[node name="Capsule" type="MeshInstance3D" parent="Player"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+layers = 3
+mesh = SubResource("CapsuleMesh_0vrr0")
+
+[node name="SkyEnvironment" parent="." instance=ExtResource("1_csire")]
+
+[node name="Terrain" type="MeshInstance3D" parent="."]
+layers = 3
+mesh = SubResource("PlaneMesh_qx70j")
+skin = SubResource("Skin_ysluw")
+surface_material_override/0 = SubResource("ShaderMaterial_727p2")
+script = ExtResource("3_jkpni")
